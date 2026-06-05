@@ -3,115 +3,193 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Style Transfer Pro</title>
-  <meta name="theme-color" content="#10131f">
+  <title>Style Bot App</title>
+  <meta name="theme-color" content="#0d1018">
   <link rel="stylesheet" href="./styles.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <main class="app-shell">
-    <section class="hero-card">
-      <div class="hero-copy">
-        <p class="eyebrow">Telegram Mini App</p>
-        <h1>Сделай из фото арт, который хочется отправить друзьям</h1>
-        <p class="subhead">Портреты, пары, питомцы, сторис и аватарки. Первый результат прямо в Telegram.</p>
-        <div class="hero-badges">
-          <span>100+ пользователей</span>
-          <span>старт от 5 стилизаций</span>
-          <span>без подписки</span>
-        </div>
-        <div class="hero-actions">
-          <a class="button primary" data-bot-link href="https://t.me/NeuralStyleTransferBot?start=src_webapp">Открыть бота</a>
-          <button class="button secondary" id="openTelegramBtn" type="button">Открыть в Telegram</button>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SB</div>
+        <div>
+          <p class="eyebrow">Telegram Mini App</p>
+          <h1>Style Bot</h1>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="mock before">До</div>
-        <div class="mock after">После</div>
-      </div>
-    </section>
 
-    <section class="panel pricing-panel">
-      <div class="section-head">
-        <p class="eyebrow">Пакеты</p>
-        <h2>Вход без боли</h2>
-      </div>
-      <div class="pricing-grid">
-        <article class="price-card starter">
-          <p class="label">Старт</p>
-          <h3>5 стилизаций</h3>
-          <p class="price">5 Stars</p>
-          <p>Лучший вариант, чтобы попробовать и получить первый вау-результат.</p>
-        </article>
-        <article class="price-card popular">
-          <p class="label">Популярно</p>
-          <h3>15 стилизаций</h3>
-          <p class="price">15 Stars</p>
-          <p>Для аватарок, пары и нескольких разных стилей на одно фото.</p>
-        </article>
-        <article class="price-card pro">
-          <p class="label">Выгодно</p>
-          <h3>30+ стилизаций</h3>
-          <p class="price">от 30 Stars</p>
-          <p>Для сторис, подарков, экспериментов и повторных запусков.</p>
-        </article>
-      </div>
-    </section>
+      <nav class="nav">
+        <button class="nav-item active" data-tab="dashboard">Dashboard</button>
+        <button class="nav-item" data-tab="styles">Styles</button>
+        <button class="nav-item" data-tab="pricing">Pricing</button>
+        <button class="nav-item" data-tab="campaigns">Campaigns</button>
+        <button class="nav-item" data-tab="reviews">Reviews</button>
+      </nav>
 
-    <section class="content-grid">
-      <article class="panel">
+      <div class="sidebar-cta">
+        <button class="button primary wide" id="sendPhotoBtn" type="button">Отправить фото</button>
+        <button class="button secondary wide" id="openBotBtn" type="button">Открыть чат бота</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Твой control center</p>
+          <h2 id="topTitle">Dashboard</h2>
+        </div>
+        <div class="user-chip" id="userChip">Гость</div>
+      </section>
+
+      <section class="tab active" id="tab-dashboard">
+        <div class="hero-grid">
+          <article class="hero-card feature-gradient">
+            <div>
+              <p class="eyebrow">Быстрый старт</p>
+              <h3>Преврати фото в арт за пару минут</h3>
+              <p class="muted">Лучше всего работают портреты, пары, питомцы и фото для сторис.</p>
+            </div>
+            <div class="hero-actions">
+              <button class="button primary" id="dashboardSendPhotoBtn" type="button">Начать</button>
+              <button class="button ghost" data-open-tab="pricing" type="button">Посмотреть пакеты</button>
+            </div>
+          </article>
+
+          <article class="hero-card stat-card">
+            <span class="stat-label">Пользователи</span>
+            <strong>100+</strong>
+            <span class="muted">социальное доказательство</span>
+          </article>
+
+          <article class="hero-card stat-card">
+            <span class="stat-label">Старт</span>
+            <strong>5 Stars</strong>
+            <span class="muted">первый пакет без боли</span>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel balance-panel">
+            <div class="section-head">
+              <p class="eyebrow">Баланс</p>
+              <h3>Что доступно сейчас</h3>
+            </div>
+            <div class="balance-grid">
+              <div class="balance-box">
+                <span>Бесплатно</span>
+                <strong id="freeCount">2</strong>
+              </div>
+              <div class="balance-box">
+                <span>Куплено</span>
+                <strong id="paidCount">0</strong>
+              </div>
+              <div class="balance-box">
+                <span>Всего работ</span>
+                <strong id="totalCount">0</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel steps-panel">
+            <div class="section-head">
+              <p class="eyebrow">Flow</p>
+              <h3>Как пользоваться</h3>
+            </div>
+            <ol class="steps">
+              <li>Нажми «Отправить фото»</li>
+              <li>Выбери режим и стиль</li>
+              <li>Получай результат и сравнение до/после</li>
+            </ol>
+          </article>
+
+          <article class="panel upsell-panel">
+            <div class="section-head">
+              <p class="eyebrow">Growth</p>
+              <h3>Бонусы и рост</h3>
+            </div>
+            <ul class="feature-list">
+              <li>Реферальный бонус за друзей</li>
+              <li>Ежедневный бонус в /daily</li>
+              <li>Мини-пакет для первой покупки</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="tab" id="tab-styles">
         <div class="section-head">
-          <p class="eyebrow">Лучшие кейсы</p>
-          <h2>Что заходит лучше всего</h2>
+          <p class="eyebrow">Styles</p>
+          <h3>Куда лучше вести пользователя</h3>
         </div>
-        <ul class="feature-list">
-          <li>Селфи и портреты для аватарок</li>
-          <li>Фото пары как цифровой подарок</li>
-          <li>Питомцы и мемные стилизации</li>
-          <li>Контент для сторис и постов</li>
-        </ul>
-      </article>
+        <div class="style-grid">
+          <article class="style-card">
+            <span>Van Gogh</span>
+            <p>Для ярких портретов и атмосферных фото.</p>
+          </article>
+          <article class="style-card">
+            <span>Monet</span>
+            <p>Для мягких романтичных кадров и пары.</p>
+          </article>
+          <article class="style-card">
+            <span>Picasso</span>
+            <p>Для необычных аватарок и экспериментальных кадров.</p>
+          </article>
+        </div>
+      </section>
 
-      <article class="panel">
+      <section class="tab" id="tab-pricing">
         <div class="section-head">
-          <p class="eyebrow">Путь пользователя</p>
-          <h2>Как это работает</h2>
+          <p class="eyebrow">Pricing</p>
+          <h3>Пакеты для запуска и масштабирования</h3>
         </div>
-        <ol class="steps">
-          <li>Открываешь бота</li>
-          <li>Отправляешь фото</li>
-          <li>Выбираешь режим и стиль</li>
-          <li>Получаешь результат и сравнение до/после</li>
-        </ol>
-      </article>
+        <div class="pricing-grid">
+          <article class="price-card starter">
+            <p class="label">Старт</p>
+            <h4>5 стилизаций</h4>
+            <strong>5 Stars</strong>
+            <p>Самый лёгкий вход для первого платежа.</p>
+            <button class="button primary wide" data-open-bot-command="buy" type="button">Купить</button>
+          </article>
+          <article class="price-card popular">
+            <p class="label">Популярно</p>
+            <h4>15 стилизаций</h4>
+            <strong>15 Stars</strong>
+            <p>Идеально для серии фото и нескольких стилей.</p>
+            <button class="button primary wide" data-open-bot-command="buy" type="button">Купить</button>
+          </article>
+          <article class="price-card pro">
+            <p class="label">Выгодно</p>
+            <h4>30+ стилизаций</h4>
+            <strong>30+ Stars</strong>
+            <p>Для активного использования и подарочных серий.</p>
+            <button class="button secondary wide" data-open-bot-command="buy" type="button">Открыть пакеты</button>
+          </article>
+        </div>
+      </section>
 
-      <article class="panel reviews-panel">
+      <section class="tab" id="tab-campaigns">
         <div class="section-head">
-          <p class="eyebrow">Отзывы</p>
-          <h2>Что пишут после первого запуска</h2>
+          <p class="eyebrow">Campaign links</p>
+          <h3>Готовые ссылки под трафик</h3>
         </div>
-        <div class="quotes">
+        <div class="campaign-links" id="campaignLinks"></div>
+      </section>
+
+      <section class="tab" id="tab-reviews">
+        <div class="section-head">
+          <p class="eyebrow">Social proof</p>
+          <h3>Что нравится пользователям</h3>
+        </div>
+        <div class="reviews-grid">
           <blockquote>«Очень удобно, что всё прямо в Telegram»</blockquote>
-          <blockquote>«Первый результат сразу захотелось отправить друзьям»</blockquote>
-          <blockquote>«Лучше всего зашли портреты и фото пары»</blockquote>
+          <blockquote>«Первый результат уже захотелось отправить друзьям»</blockquote>
+          <blockquote>«Портреты и фото пары зашли лучше всего»</blockquote>
         </div>
-      </article>
-    </section>
+      </section>
+    </main>
+  </div>
 
-    <section class="panel campaigns-panel">
-      <div class="section-head">
-        <p class="eyebrow">Запуск рекламы</p>
-        <h2>Готовые ссылки под канал</h2>
-      </div>
-      <div class="campaign-links" id="campaignLinks"></div>
-    </section>
-
-    <section class="panel final-cta">
-      <h2>Готов запустить первую стилизацию?</h2>
-      <p>Нажми кнопку ниже и начни с бесплатного фото или стартового пакета.</p>
-      <a class="button primary wide" data-bot-link href="https://t.me/NeuralStyleTransferBot?start=src_webapp">Перейти в бот</a>
-    </section>
-  </main>
   <script src="./app.js"></script>
 </body>
 </html>
