@@ -9,7 +9,16 @@ const topTitle = document.getElementById('topTitle');
 const freeCount = document.getElementById('freeCount');
 const paidCount = document.getElementById('paidCount');
 const totalCount = document.getElementById('totalCount');
+const profileStatus = document.getElementById('profileStatus');
 const apiBase = 'http://127.0.0.1:8787';
+
+const tabTitles = {
+  dashboard: 'Главная',
+  styles: 'Стили',
+  pricing: 'Пакеты',
+  campaigns: 'Ссылки',
+  reviews: 'Отзывы',
+};
 
 if (tg) {
   tg.ready();
@@ -25,31 +34,48 @@ if (user) {
 }
 
 async function loadProfile() {
-  if (!user?.id) return;
+  if (!user?.id) {
+    profileStatus.textContent = 'Нет Telegram user';
+    profileStatus.classList.add('error');
+    return;
+  }
   try {
     const res = await fetch(`${apiBase}/api/profile?user_id=${user.id}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (!data.user) return;
     freeCount.textContent = String(data.user.free_uses ?? 0);
     paidCount.textContent = String(data.user.paid_uses ?? 0);
     totalCount.textContent = String(data.user.total_uses ?? 0);
+    profileStatus.textContent = 'Профиль подключен';
+    profileStatus.classList.remove('error');
+    profileStatus.classList.add('ok');
   } catch (err) {
     console.error('profile load failed', err);
+    profileStatus.textContent = 'API недоступен';
+    profileStatus.classList.remove('ok');
+    profileStatus.classList.add('error');
   }
 }
 
 loadProfile();
 
 const tabs = document.querySelectorAll('[data-tab]');
+const mobileTabs = document.querySelectorAll('.mobile-nav-item[data-tab]');
 const panes = document.querySelectorAll('.tab');
 
 function activateTab(name) {
   tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
+  mobileTabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === name));
   panes.forEach((pane) => pane.classList.toggle('active', pane.id === `tab-${name}`));
-  topTitle.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+  topTitle.textContent = tabTitles[name] || name;
 }
 
 tabs.forEach((tab) => {
+  tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+});
+
+mobileTabs.forEach((tab) => {
   tab.addEventListener('click', () => activateTab(tab.dataset.tab));
 });
 
@@ -103,7 +129,7 @@ const sources = [
 for (const [source, label] of sources) {
   const link = document.createElement('a');
   link.href = `https://t.me/${botUsername}?start=src_${source}`;
-  link.textContent = `${label} -> src_${source}`;
+  link.innerHTML = `<strong>${label}</strong><span>src_${source}</span>`;
   link.target = '_blank';
   link.rel = 'noreferrer';
   campaignLinks?.appendChild(link);
