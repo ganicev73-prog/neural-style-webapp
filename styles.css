@@ -544,6 +544,75 @@ h1 {
   color: #dce7ff;
 }
 
+.miniapp-panel {
+  grid-column: span 3;
+}
+
+.miniapp-form {
+  display: grid;
+  gap: 16px;
+}
+
+.upload-box {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  border-radius: 20px;
+  border: 1px dashed rgba(138, 178, 255, 0.26);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.upload-box span {
+  color: #dce7ff;
+  font-weight: 700;
+}
+
+.select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.miniapp-form select {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(138, 178, 255, 0.18);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  padding: 12px 14px;
+}
+
+.miniapp-result {
+  min-height: 40px;
+}
+
+.miniapp-result-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(138, 178, 255, 0.14);
+}
+
+.miniapp-result-card img {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  display: block;
+}
+
 .style-accent {
   width: 56px;
   height: 6px;
@@ -676,6 +745,10 @@ h1 {
   .use-cases-panel {
     grid-column: auto;
   }
+
+  .miniapp-panel {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 860px) {
@@ -701,6 +774,10 @@ h1 {
   .style-grid,
   .pricing-grid,
   .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .select-grid {
     grid-template-columns: 1fr;
   }
 

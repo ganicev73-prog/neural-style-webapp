@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Style Bot App</title>
   <meta name="theme-color" content="#0d1018">
+  <meta name="api-base" content="https://owners-tennis-dictionary-waters.trycloudflare.com">
   <link rel="stylesheet" href="./styles.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -177,6 +178,40 @@
               <span class="case-chip">Аватарки</span>
               <span class="case-chip">Сторис</span>
               <span class="case-chip">Подарки</span>
+            </div>
+          </article>
+
+          <article class="panel miniapp-panel">
+            <div class="section-head">
+              <p class="eyebrow">Mini App</p>
+              <h3>Сделай стилизацию прямо здесь</h3>
+            </div>
+            <div class="miniapp-form">
+              <label class="upload-box">
+                <input id="imageInput" type="file" accept="image/*">
+                <span>Выбери фото</span>
+              </label>
+              <div class="select-grid">
+                <label>
+                  <span class="field-label">Режим</span>
+                  <select id="modeSelect">
+                    <option value="0">Пиксель-арт</option>
+                    <option value="1" selected>Быстрая</option>
+                    <option value="2">Глубокий CPU</option>
+                    <option value="3">Максимум качества</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="field-label">Стиль</span>
+                  <select id="styleSelect">
+                    <option value="0">Van Gogh</option>
+                    <option value="1">Monet</option>
+                    <option value="2">Picasso</option>
+                  </select>
+                </label>
+              </div>
+              <button class="button primary" id="miniappGenerateBtn" type="button">Стилизовать в Mini App</button>
+              <div class="miniapp-result" id="miniappResult"></div>
             </div>
           </article>
         </div>

@@ -10,7 +10,12 @@ const freeCount = document.getElementById('freeCount');
 const paidCount = document.getElementById('paidCount');
 const totalCount = document.getElementById('totalCount');
 const profileStatus = document.getElementById('profileStatus');
-const apiBase = 'http://127.0.0.1:8787';
+const imageInput = document.getElementById('imageInput');
+const modeSelect = document.getElementById('modeSelect');
+const styleSelect = document.getElementById('styleSelect');
+const miniappGenerateBtn = document.getElementById('miniappGenerateBtn');
+const miniappResult = document.getElementById('miniappResult');
+const apiBase = document.querySelector('meta[name="api-base"]')?.content || window.location.origin;
 
 const tabTitles = {
   dashboard: 'Главная',
@@ -134,3 +139,67 @@ for (const [source, label] of sources) {
   link.rel = 'noreferrer';
   campaignLinks?.appendChild(link);
 }
+
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || '');
+      resolve(result.split(',')[1] || '');
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function generateInsideMiniApp() {
+  if (!user?.id) {
+    miniappResult.innerHTML = '<div class="miniapp-result-card">Нет Telegram user</div>';
+    return;
+  }
+  const file = imageInput?.files?.[0];
+  if (!file) {
+    miniappResult.innerHTML = '<div class="miniapp-result-card">Сначала выбери фото.</div>';
+    return;
+  }
+
+  miniappGenerateBtn.disabled = true;
+  miniappGenerateBtn.textContent = 'Обработка...';
+  miniappResult.innerHTML = '<div class="miniapp-result-card">Запускаю стилизацию...</div>';
+
+  try {
+    const imageBase64 = await fileToBase64(file);
+    const res = await fetch(`${apiBase}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: user.id,
+        image_base64: imageBase64,
+        mode: Number(modeSelect.value),
+        style_id: Number(styleSelect.value),
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.job_id) throw new Error(data.error || `HTTP ${res.status}`);
+
+    const resultRes = await fetch(`${apiBase}/api/result?job_id=${data.job_id}`);
+    const resultData = await resultRes.json();
+    if (!resultRes.ok) throw new Error(resultData.error || `HTTP ${resultRes.status}`);
+
+    miniappResult.innerHTML = `
+      <div class="miniapp-result-card">
+        <img src="data:image/jpeg;base64,${resultData.image_base64}" alt="Result">
+        <p>${resultData.caption}</p>
+      </div>
+    `;
+    loadProfile();
+  } catch (err) {
+    console.error('mini app generation failed', err);
+    miniappResult.innerHTML = `<div class="miniapp-result-card">Ошибка: ${err.message}</div>`;
+  } finally {
+    miniappGenerateBtn.disabled = false;
+    miniappGenerateBtn.textContent = 'Стилизовать в Mini App';
+  }
+}
+
+miniappGenerateBtn?.addEventListener('click', generateInsideMiniApp);
