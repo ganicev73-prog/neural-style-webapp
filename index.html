@@ -37,7 +37,7 @@
 
       <div class="sidebar-cta">
         <button class="button primary wide" id="focusMiniAppBtn" type="button">Сделать внутри Mini App</button>
-        <button class="button secondary wide" id="openBotBtn" type="button">Открыть чат бота</button>
+        <button class="button secondary wide" id="showMiniAppInfoBtn" type="button">Что доступно внутри</button>
       </div>
     </aside>
 
@@ -215,8 +215,22 @@
                     <option value="0">Van Gogh</option>
                     <option value="1">Monet</option>
                     <option value="2">Picasso</option>
+                    <option value="custom">Свой стиль</option>
                   </select>
                 </label>
+              </div>
+              <div class="custom-style-box hidden" id="customStyleBox">
+                <label class="upload-box secondary-upload">
+                  <input id="customStyleInput" type="file" accept="image/*">
+                  <span>Выбери style-картинку</span>
+                </label>
+                <div class="image-preview-card hidden" id="customStylePreviewCard">
+                  <img id="customStylePreview" alt="Style reference">
+                  <div class="image-preview-meta">
+                    <strong>Style reference загружен</strong>
+                    <p class="muted">Эта картинка будет использована как источник художественного стиля.</p>
+                  </div>
+                </div>
               </div>
               <button class="button primary" id="miniappGenerateBtn" type="button">Стилизовать в Mini App</button>
               <div class="miniapp-progress hidden" id="miniappProgress">
@@ -261,9 +275,9 @@
           <div>
             <p class="eyebrow">Свой стиль</p>
             <h4>Хочешь свой референс?</h4>
-            <p class="muted">В боте можно отправить отдельную картинку как стиль и получить более персональный результат.</p>
+            <p class="muted">Следующий этап для Mini App: загрузка отдельной style-картинки и персональная стилизация прямо внутри приложения.</p>
           </div>
-          <button class="button primary" data-open-bot-command="start" type="button">Открыть бота</button>
+          <button class="button primary" id="showCustomStyleInfoBtn" type="button">Скоро внутри Mini App</button>
         </div>
       </section>
 
@@ -273,7 +287,7 @@
           <h3>Пакеты для быстрого старта и апгрейда</h3>
         </div>
         <div class="pricing-grid">
-          <article class="price-card starter">
+          <article class="price-card starter" data-package-card="5">
             <p class="label">Старт</p>
             <h4>5 стилизаций</h4>
             <strong>5 Stars</strong>
@@ -282,9 +296,9 @@
               <li>Под первый тест</li>
               <li>Под 1-2 фото</li>
             </ul>
-            <button class="button primary wide" data-open-bot-command="buy" type="button">Купить</button>
+            <button class="button primary wide" data-package="5" type="button">Выбрать</button>
           </article>
-          <article class="price-card popular">
+          <article class="price-card popular" data-package-card="15">
             <p class="label">Популярно</p>
             <h4>15 стилизаций</h4>
             <strong>15 Stars</strong>
@@ -293,9 +307,9 @@
               <li>Лучший старт</li>
               <li>Для серии кадров</li>
             </ul>
-            <button class="button primary wide" data-open-bot-command="buy" type="button">Купить</button>
+            <button class="button primary wide" data-package="15" type="button">Выбрать</button>
           </article>
-          <article class="price-card pro">
+          <article class="price-card pro" data-package-card="30">
             <p class="label">Выгодно</p>
             <h4>30+ стилизаций</h4>
             <strong>30+ Stars</strong>
@@ -304,12 +318,26 @@
               <li>Максимум свободы</li>
               <li>Для контент-потока</li>
             </ul>
-            <button class="button secondary wide" data-open-bot-command="buy" type="button">Открыть пакеты</button>
+            <button class="button secondary wide" data-package="30" type="button">Выбрать</button>
           </article>
+        </div>
+        <div class="package-center">
+          <div class="package-center-head">
+            <div>
+              <p class="eyebrow">Package Center</p>
+              <h4>Выбранный пакет</h4>
+            </div>
+            <div class="package-badge" id="selectedPackageBadge">Не выбран</div>
+          </div>
+          <p class="muted" id="selectedPackageText">Выбери пакет, чтобы зафиксировать подходящий сценарий использования внутри Mini App.</p>
+          <div class="package-actions">
+            <button class="button primary" id="useSelectedPackageBtn" type="button">Использовать для генерации</button>
+            <button class="button ghost" id="clearSelectedPackageBtn" type="button">Сбросить выбор</button>
+          </div>
         </div>
         <div class="pricing-note">
           <span class="pricing-note-dot"></span>
-          <p class="muted">Пакеты открываются внутри Telegram, без отдельной регистрации и без подписки.</p>
+          <p class="muted">Следующий шаг для Mini App: встроенная покупка пакетов без выхода в чат. Сейчас сначала доводим саму генерацию и in-app flow.</p>
         </div>
       </section>
 
