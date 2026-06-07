@@ -36,7 +36,7 @@
       </div>
 
       <div class="sidebar-cta">
-        <button class="button primary wide" id="sendPhotoBtn" type="button">Отправить фото</button>
+        <button class="button primary wide" id="focusMiniAppBtn" type="button">Сделать внутри Mini App</button>
         <button class="button secondary wide" id="openBotBtn" type="button">Открыть чат бота</button>
       </div>
     </aside>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="hero-actions">
-              <button class="button primary" id="dashboardSendPhotoBtn" type="button">Запустить стилизацию</button>
+              <button class="button primary" id="dashboardSendPhotoBtn" type="button">Выбрать фото и запустить</button>
               <button class="button ghost" data-open-tab="pricing" type="button">Смотреть пакеты</button>
             </div>
           </article>
@@ -186,11 +186,19 @@
               <p class="eyebrow">Mini App</p>
               <h3>Сделай стилизацию прямо здесь</h3>
             </div>
+            <p class="muted">Теперь основной сценарий идёт прямо внутри Mini App: выбираешь фото, режим и стиль, а результат получаешь здесь же, без перехода в чат.</p>
             <div class="miniapp-form">
               <label class="upload-box">
                 <input id="imageInput" type="file" accept="image/*">
                 <span>Выбери фото</span>
               </label>
+              <div class="image-preview-card hidden" id="imagePreviewCard">
+                <img id="imagePreview" alt="Выбранное фото">
+                <div class="image-preview-meta">
+                  <strong>Фото готово к обработке</strong>
+                  <p class="muted">Проверь кадр и запусти стилизацию.</p>
+                </div>
+              </div>
               <div class="select-grid">
                 <label>
                   <span class="field-label">Режим</span>
@@ -211,6 +219,10 @@
                 </label>
               </div>
               <button class="button primary" id="miniappGenerateBtn" type="button">Стилизовать в Mini App</button>
+              <div class="miniapp-progress hidden" id="miniappProgress">
+                <div class="miniapp-progress-bar"><span id="miniappProgressFill"></span></div>
+                <p class="muted" id="miniappProgressText">Подготавливаем задачу...</p>
+              </div>
               <div class="miniapp-result" id="miniappResult"></div>
             </div>
           </article>

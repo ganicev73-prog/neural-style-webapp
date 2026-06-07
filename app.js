@@ -2,7 +2,7 @@ const tg = window.Telegram?.WebApp;
 const botUsername = 'NeuralStyleTransferBot';
 const campaignLinks = document.getElementById('campaignLinks');
 const openBotBtn = document.getElementById('openBotBtn');
-const sendPhotoBtn = document.getElementById('sendPhotoBtn');
+const focusMiniAppBtn = document.getElementById('focusMiniAppBtn');
 const dashboardSendPhotoBtn = document.getElementById('dashboardSendPhotoBtn');
 const userChip = document.getElementById('userChip');
 const topTitle = document.getElementById('topTitle');
@@ -15,6 +15,10 @@ const modeSelect = document.getElementById('modeSelect');
 const styleSelect = document.getElementById('styleSelect');
 const miniappGenerateBtn = document.getElementById('miniappGenerateBtn');
 const miniappResult = document.getElementById('miniappResult');
+const imagePreview = document.getElementById('imagePreview');
+const imagePreviewCard = document.getElementById('imagePreviewCard');
+const miniappProgress = document.getElementById('miniappProgress');
+const miniappProgressText = document.getElementById('miniappProgressText');
 const apiBase = document.querySelector('meta[name="api-base"]')?.content || window.location.origin;
 
 const tabTitles = {
@@ -97,27 +101,15 @@ function openBotCommand(command) {
   }
 }
 
-function promptSendPhoto() {
-  const text = 'Открой чат с ботом и отправь фото. Сразу после этого выбери режим.';
-  if (tg?.showPopup) {
-    tg.showPopup({
-      title: 'Отправь фото',
-      message: text,
-      buttons: [
-        { type: 'default', text: 'Открыть бота', id: 'open-bot' },
-        { type: 'close' }
-      ]
-    }, (id) => {
-      if (id === 'open-bot') openBotCommand('start');
-    });
-  } else {
-    alert(text);
-  }
+function focusMiniAppFlow() {
+  activateTab('dashboard');
+  imageInput?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  imageInput?.click();
 }
 
 openBotBtn?.addEventListener('click', () => openBotCommand('start'));
-sendPhotoBtn?.addEventListener('click', promptSendPhoto);
-dashboardSendPhotoBtn?.addEventListener('click', promptSendPhoto);
+focusMiniAppBtn?.addEventListener('click', focusMiniAppFlow);
+dashboardSendPhotoBtn?.addEventListener('click', focusMiniAppFlow);
 
 document.querySelectorAll('[data-open-bot-command]').forEach((button) => {
   button.addEventListener('click', () => openBotCommand(button.dataset.openBotCommand));
@@ -165,10 +157,13 @@ async function generateInsideMiniApp() {
 
   miniappGenerateBtn.disabled = true;
   miniappGenerateBtn.textContent = 'Обработка...';
-  miniappResult.innerHTML = '<div class="miniapp-result-card">Запускаю стилизацию...</div>';
+  miniappResult.innerHTML = '';
+  miniappProgress.classList.remove('hidden');
+  miniappProgressText.textContent = 'Запускаю стилизацию...';
 
   try {
     const imageBase64 = await fileToBase64(file);
+    miniappProgressText.textContent = 'Отправляю фото и параметры в API...';
     const res = await fetch(`${apiBase}/api/generate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -182,6 +177,7 @@ async function generateInsideMiniApp() {
     const data = await res.json();
     if (!res.ok || !data.job_id) throw new Error(data.error || `HTTP ${res.status}`);
 
+    miniappProgressText.textContent = 'Получаю готовый результат...';
     const resultRes = await fetch(`${apiBase}/api/result?job_id=${data.job_id}`);
     const resultData = await resultRes.json();
     if (!resultRes.ok) throw new Error(resultData.error || `HTTP ${resultRes.status}`);
@@ -195,11 +191,23 @@ async function generateInsideMiniApp() {
     loadProfile();
   } catch (err) {
     console.error('mini app generation failed', err);
-    miniappResult.innerHTML = `<div class="miniapp-result-card">Ошибка: ${err.message}</div>`;
+    miniappResult.innerHTML = `<div class="miniapp-result-card error">Ошибка: ${err.message}</div>`;
   } finally {
+    miniappProgress.classList.add('hidden');
     miniappGenerateBtn.disabled = false;
     miniappGenerateBtn.textContent = 'Стилизовать в Mini App';
   }
 }
 
 miniappGenerateBtn?.addEventListener('click', generateInsideMiniApp);
+
+imageInput?.addEventListener('change', () => {
+  const file = imageInput.files?.[0];
+  if (!file) {
+    imagePreviewCard.classList.add('hidden');
+    return;
+  }
+  const url = URL.createObjectURL(file);
+  imagePreview.src = url;
+  imagePreviewCard.classList.remove('hidden');
+});
